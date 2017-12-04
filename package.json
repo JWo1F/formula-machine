@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/oprosso/formula-machine.git"
+    "url": "git+ssh://git@github.com:JWo1F/formula-machine.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/oprosso/formula-machine#readme",
+  "homepage": "https://github.com/JWo1F/formula-machine#readme",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
