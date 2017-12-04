@@ -1,0 +1,31 @@
+{
+  "name": "formula-machine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/bundle.js",
+  "scripts": {
+    "test": "nyc --reporter=text mocha --reporter=list",
+    "build": "rm -rf build/bundle.js && mkdir -p build && rollup -w -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/oprosso/formula-machine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/oprosso/formula-machine#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.12.1",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-eslint": "^4.0.0"
+  }
+}
