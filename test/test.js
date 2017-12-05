@@ -11,18 +11,48 @@ describe('general', function() {
     assert.equal(2, formula._renderBrackets(2));
     assert.equal(2, formula._renderBrackets({ number: 2 }));
     assert.equal('$vars["x"]', formula._renderBrackets({ variable: 'x' }));
-    assert.equal('(2+2)', formula._renderBrackets({ operator: '+', first: 2, second: 2 }));
-    assert.equal('Math.sqrt((2+3))', formula._renderBrackets({ operator: 'sqrt', first: { formula: { operator: '+', first: 2, second: 3 } } }));
+    assert.equal('(2+2)', formula._renderBrackets({ operator: '+', operands: [2, 2] }));
+    assert.equal('Math.sqrt((2+3))', formula._renderBrackets({ operator: 'sqrt', operands: [{ operator: '+', operands: [2, 3] }] }));
     assert.throws(() => formula._renderBrackets({ unknown: true }), Error);
   });
 
   it('renderOperator', function() {
-    assert.equal('(1+2)', formula._renderOperator({ operator: '+', first: 1, second: 2 }));
-    assert.equal('Math.pow(1,2)', formula._renderOperator({ operator: 'pow', first: 1, second: 2 }));
-    assert.equal('Math.sqrt(4)', formula._renderOperator({ operator: 'sqrt', first: 4 }));
+    assert.equal('(1+2)', formula._renderOperator({ operator: '+', operands: [1, 2] }));
+    assert.equal('Math.pow(1,2)', formula._renderOperator({ operator: 'pow', operands: [1, 2] }));
+    assert.equal('Math.sqrt(4)', formula._renderOperator({ operator: 'sqrt', operands: [4] }));
   });
 
   it('working', function() {
-    assert.equal(3, formula.toFunction({ operator: '+', first: { operator: '-', first: 4, second: 2 }, second: 1 })());
+    assert.equal(3, formula.toFunction({ operator: '+', operands: [{ operator: '-', operands: [4, 2] }, 1] })());
+    assert.equal(5, formula.toFunction({ operator: '/', operands: [100, 2, 10] })());
+
+    // (2^2 + 4^2 + 5^2) / (2^2 - 4^2 / 2)
+    const src = {
+      operator: '/',
+      operands: [
+        {
+          operator: '+',
+          operands: [
+            { operator: 'pow', operands: [2, 2] },
+            { operator: 'pow', operands: [4, 2] },
+            { operator: 'pow', operands: [5, 2] },
+          ],
+        },
+        {
+          operator: '-',
+          operands: [
+            { operator: 'pow', operands: [2, 2] },
+            {
+              operator: '/',
+              operands: [
+                { operator: 'pow', operands: [4, 2] },
+                2
+              ]
+            },
+          ]
+        }
+      ]
+    }
+    assert.equal(-11.25, formula.toFunction(src)())
   });
 })
