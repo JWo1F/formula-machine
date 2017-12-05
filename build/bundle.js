@@ -10,7 +10,6 @@ function _renderBrackets(item) {
   if (typeof item == 'number') return _toNumber(item);
 
   if ('number' in item) return _toNumber(item.number);
-  if ('formula' in item) return _renderBrackets(item.formula);
   if ('variable' in item) return '$vars["' + item.variable + '"]';
   if ('operator' in item) return _renderOperator(item);
 
@@ -18,16 +17,20 @@ function _renderBrackets(item) {
 }
 
 function _renderOperator(item) {
+  var operands = item.operands.map(function (operand) {
+    return _renderBrackets(operand);
+  });
+
   if (['+', '-', '*', '/'].includes(item.operator)) {
-    return '(' + _renderBrackets(item.first) + item.operator + _renderBrackets(item.second) + ')';
+    return '(' + operands.join(item.operator) + ')';
   }
 
   if (item.operator == 'pow') {
-    return 'Math.pow(' + _renderBrackets(item.first) + ',' + _renderBrackets(item.second) + ')';
+    return 'Math.pow(' + operands[0] + ',' + operands[1] + ')';
   }
 
   if (item.operator == 'sqrt') {
-    return 'Math.sqrt(' + _renderBrackets(item.first) + ')';
+    return 'Math.sqrt(' + operands[0] + ')';
   }
 
   throw new Error('Unexpected operator');
