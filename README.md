@@ -11,19 +11,16 @@ var formula = require('formula-machine');
 
 var src = {
   operator: '+',
-  first: 2,
-  second: {
+  operands: [2, {
     operator: 'sqrt',
-    first: {
-      operator: '*',
-      first: { number: 4 },
-      second: {
+    operands: [
+      { number: 4 }, // like a just number
+      {
         operator: '/',
-        first: 2,
-        second: 2
+        operands: [2, 2]
       }
-    }
-  }
+    ]
+  }]
 };
 
 // will convert to
@@ -40,13 +37,28 @@ var formula = require('formula-machine');
 
 var src = {
   operator: '+',
-  first: 2,
-  second: { variable: 'name' }
+  operands: [2, { variable: 'name' }]
 };
 
 var fn = formula.toFunction(src);
 
 console.log(fn({ name: 4 })); // 2 + 4 = 6
+```
+
+Multiple operands
+=================
+
+```js
+var formula = require('formula-machine');
+
+var src = {
+  operator: '+',
+  operands: [2, 3, 4, 5, { operator: '+', operands: [6, 7] }]
+};
+
+var fn = formula.toFunction(src);
+
+console.log(fn()); // 2 + 3 + 4 + 5 + (6 + 7) = 27
 ```
 
 operators
